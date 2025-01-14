@@ -1,71 +1,76 @@
 //Practicing C manual memory management 
+//Practicing Manual Memory Management in C
+//
 
 
 #include <stdio.h>
 #include <stdlib.h>
 
 
-typedef Calc
-{
-    double num1;
-    double num2;
-    char op;
-    double result;
-}
-void freeCalc(*Calc calc){free(calc);}
-void Calculate(*Calc calc)
-{
-    switch(calc->op)
-    {
-        case '+':
-            calc->result = calc->num1 + calc->num2;
-            break;
-        case '-':
-            calc->result = calc->num1 - calc->num2;
-            break;
-        case '*':
-            calc->result = calc->num1 * calc->num2;
-            break;
-        case '/':
-            calc->result = calc->num1 / calc->num2;
-        default:
-            fprintf(stderr, "Invalid Operator");
-            break;
-    }
+typedef struct {
+	double num1;
+	double num2;
+	double result;
+	char operator;
+} Calc;
+void freeCalc(Calc* calc){free(calc);}
+void calculate(Calc* calc){
+	switch(calc->operator){
+		case '+':
+			calc->result = calc->num1 + calc->num2;
+			break;
+		case '-':
+			calc->result = calc->num1 - calc->num2;
+			break;
+		case '*':
+			calc->result = calc->num1 * calc->num2;
+			break;
+		case '/':
+			calc->result = calc->num1 / calc->num2;
+			break;
+		default:
+			fprintf(stderr, "Invalid operator\n");
+			break;
+	}
 }
 
 
 int main()
 {
-    printf("We Ball");
+	printf("We Ball\n");
 
-    Calc* calc = malloc(sizeof(Calc));
-    if (calc == NULL){
-        fprintf(stderr, "Failed to allocate memory for calculator");
-        retun 1;
-    }
+	Calc* calc = (Calc*)malloc(sizeof(Calc));
+	if (calc == NULL){
+		fprintf(stderr, "Memory allocation failed\n");
+		return 1;
+	}
 
-    printf("Enter First Number: ");
-    if (scanf("%lf", calc->num1) != 1){
-        fprintf(stderr, "Invalid Input\n");
-        freeCalc(calc);
-    }
+	printf("Enter first number: ");
+	if (scanf("%lf", &calc->num1) != 1){
+		fprintf(stderr, "Invalid input\n");
+		freeCalc(calc);
+		return 1;
+	}
 
-    printf("Enter Second Number\n");
-    if (scanf("%lf", calc->num2) != 1){
-        fprintf(stderr, "Invalid Input\n");
-    }
+	printf("Enter second number: ");
+	if (scanf("%lf", &calc->num2) != 1){
+		fprintf(stderr, "Invalid input\n");
+		freeCalc(calc);
+		return 1;
+	}
 
-    printf("Enter operator: ");
-    while (scanf("%lf", calc->op) != 1 || (calc->op != '+' && calc->op != '-' && calc->op != '*' && calc->op != '/'))
-    {
-        fprintf(stderr, "Invalid operator\n");
-        printf("Enter operator: ");
-    }
 
-    Calculate(calc);
-    printf("Result : %lf", calc->result);
+	//Force correct operator input 
+	printf("Enter operator: ");
+	while (scanf(" %c", &calc->operator) != 1 || (calc->operator != '+' && calc->operator != '-' && calc->operator != '*' && calc->operator != '/')){
+		fprintf(stderr, "Invalid operator\n");
+		printf("Enter operator: ");
+	}
 
-    freeCalc(calc);
-    return 0;
+	printf("Calculating...\n");
+	calculate(calc);
+	printf("Result: %.2f\n", calc->result);
+
+	freeCalc(calc);
+	return 0;
 }
