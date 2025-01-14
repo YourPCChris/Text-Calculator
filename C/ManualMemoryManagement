@@ -1,0 +1,49 @@
+
+
+
+First time properly using C's malloc and free so I thought i would explain a little both for myself and anyone looking at this for a learning purpose
+
+
+***Malloc()**
+
+The malloc() function allocated memory on the heap of the size of whatever you give it
+
+eg.
+
+//Struct Definition
+typedef Calc
+{
+    double num1;
+    double num2;
+    double result;
+    char op;
+}
+-> Calc* calc = (Calc *)malloc(sizeof(Calc));
+
+this line defiens a struct based on a struct template **Calc**
+The (Calc *) before malloc is explicitly telling the compiler what type it is for, my understanding is that this is not neccessery here but I find 
+being explicit unnecessarily when it doesnt take up too much more time is good practice.
+
+Malloc then allocates memory on the heap the size of Calc and returns a pointer to that memory
+
+***Free()***
+Any memory that isnt allocated on the stack will not be automatically cleaned up or deallocted and so this is where free() comes in.
+
+eg.
+//Destructor Definition
+void freeCalc(Calc* calc){
+    free(calc);
+}
+-> freeCalc(calc);
+
+this line uses the inbuild function **free()** to dealocate the memory you previously allocated using mallol(). This means that another program can now use it.
+
+Unlike other languages that are made in C(bassically everything after it) you have to make your own destructor for every struct you make much like how you would have to make your own deconstructor for a class in C++ is you are not planning on using smart pointers(Which for reference you should always use these for objects in C++) this in this program is just simply putting free(calc) to free the memory allocated to the struct we made on our struct template.
+
+***Things to keep in mind*** 
+
+if your struct has an array or similar data type in it you need to allocate that memory seperatly after allocating your struct memory
+and if you do have this you need to free the memory for this before freeing the memory for the struct that holds it.
+
+
+
