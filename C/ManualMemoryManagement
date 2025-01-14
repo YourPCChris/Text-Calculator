@@ -45,5 +45,21 @@ Unlike other languages that are made in C(bassically everything after it) you ha
 if your struct has an array or similar data type in it you need to allocate that memory seperatly after allocating your struct memory
 and if you do have this you need to free the memory for this before freeing the memory for the struct that holds it.
 
+eg. 
+typedef struct 
+{
+    int* arr;
+    int start;
+    int end;
+    int size;
+} numbers;
+-> Allocate memory for struct like in calc program
+-> myStruct->arr = malloc(sizeof(int) * myStruct->size);
+***When Freeing***
+void freeNumbers(numbers* myStruct)
+{
+    free(myStruct->arr);
+    free(myStruct);
+}
 
 
